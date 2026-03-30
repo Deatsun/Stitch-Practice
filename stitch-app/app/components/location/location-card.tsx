@@ -2,6 +2,7 @@ import type { LocationItem } from "@/app/lib/types/location/types";
 
 interface LocationCardProps {
   location: LocationItem;
+  onProtectedAction: () => void;
 }
 
 function getCategoryDotClass(type: string) {
@@ -21,12 +22,17 @@ function getResidentsLabel(count: number) {
   return `${count} residents`;
 }
 
-export function LocationCard({ location }: LocationCardProps) {
+export function LocationCard({
+  location,
+  onProtectedAction,
+}: LocationCardProps) {
   const residentCount = location.residents.length;
   const categoryLabel = location.type?.trim() || "Unknown Type";
 
   return (
     <article className="group relative overflow-hidden rounded-xl border border-white/5 bg-white/5 transition-all duration-500 hover:bg-white/10">
+      
+      {/* Top visual */}
       <div className="relative aspect-[16/10] overflow-hidden">
         <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-lime-200/10 via-white/5 to-cyan-200/10 p-12">
           <div className="flex h-full w-full items-center justify-center rounded-full border border-dashed border-[var(--color-primary)]/20">
@@ -46,6 +52,7 @@ export function LocationCard({ location }: LocationCardProps) {
         </div>
       </div>
 
+      {/* Content */}
       <div className="space-y-6 p-8">
         <div>
           <h3 className="mb-1 text-3xl font-bold tracking-tight text-[var(--color-primary)]">
@@ -76,6 +83,20 @@ export function LocationCard({ location }: LocationCardProps) {
             </span>
           </div>
         </div>
+
+        {/* 🔥 CTA BUTTON (episodes style) */}
+        <button
+          onClick={onProtectedAction}
+          className="group flex w-full items-center justify-between rounded-lg border border-white/10 bg-white/5 px-5 py-3 text-sm font-medium text-white transition-all hover:bg-white/10"
+        >
+          <span className="flex items-center gap-2 uppercase tracking-[0.2em] text-[var(--color-primary)] text-xs">
+            Open location
+          </span>
+
+          <span className="material-symbols-outlined text-base transition-transform group-hover:translate-x-1">
+            arrow_forward
+          </span>
+        </button>
       </div>
     </article>
   );

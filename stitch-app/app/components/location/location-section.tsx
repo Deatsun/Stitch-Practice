@@ -16,6 +16,10 @@ interface LocationResponse {
   results: LocationItem[];
 }
 
+type LocationSectionProps = {
+  onProtectedAction: () => void;
+};
+
 const filterOptions = [
   "All Realms",
   "Planets",
@@ -34,7 +38,9 @@ function matchesCategory(location: LocationItem, activeFilter: string) {
   return true;
 }
 
-export function LocationSection() {
+export function LocationSection({
+  onProtectedAction,
+}: LocationSectionProps) {
   const sectionRef = useRef<HTMLElement | null>(null);
 
   const [locations, setLocations] = useState<LocationItem[]>([]);
@@ -151,7 +157,10 @@ export function LocationSection() {
         </div>
       ) : (
         <>
-          <LocationGrid locations={filteredLocations} />
+          <LocationGrid
+            locations={filteredLocations}
+            onProtectedAction={onProtectedAction}
+          />
 
           <div className="mt-10 flex items-center justify-between gap-4">
             <p className="text-xs uppercase tracking-[0.25em] text-[var(--color-muted)]">
