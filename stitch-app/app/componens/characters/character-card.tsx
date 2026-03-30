@@ -1,4 +1,4 @@
-import type { Character } from "@/app/lib/types";
+import type { Character } from "@/app/lib/types/characters/types";
 
 type CharacterCardProps = {
   character: Character;

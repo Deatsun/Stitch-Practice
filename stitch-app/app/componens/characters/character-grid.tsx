@@ -1,5 +1,5 @@
 import { CharacterCard } from "@/app/componens/characters/character-card";
-import type { Character } from "@/app/lib/types";
+import type { Character } from "@/app/lib/types/characters/types";
 
 type CharacterGridProps = {
   characters: Character[];

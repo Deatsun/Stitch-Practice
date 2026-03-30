@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export function Navbar() {
   return (
     <nav className="fixed top-0 z-50 flex h-20 w-full items-center justify-between bg-[var(--background)]/80 px-8 backdrop-blur-xl">
@@ -7,18 +9,16 @@ export function Navbar() {
         </span>
 
         <div className="hidden items-center gap-6 md:flex">
-          <a
-            href="#"
-            className="border-b-2 border-[var(--color-primary)] pb-1 text-[var(--color-primary)]"
-          >
-            Characters
-          </a>
-          <a
-            href="#"
-            className="text-[var(--color-muted)] transition-colors duration-300 hover:text-[var(--color-primary)]"
-          >
-            Dimensions
-          </a>
+          <Link href="/page-characters" className="text-[var(--color-muted)] transition-colors duration-300 hover:text-[var(--color-primary)]">
+  Characters
+</Link>
+          
+<Link href="/page-location" className="text-[var(--color-muted)] transition-colors duration-300 hover:text-[var(--color-primary)]">
+  Dimensions
+</Link>
+
+
+
           <a
             href="#"
             className="text-[var(--color-muted)] transition-colors duration-300 hover:text-[var(--color-primary)]"

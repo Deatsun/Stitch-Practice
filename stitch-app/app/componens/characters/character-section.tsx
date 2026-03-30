@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { CharacterGrid } from "@/app/componens/characters/character-grid";
-import type { Character } from "@/app/lib/types";
+import type { Character } from "@/app/lib/types/characters/types";
 
 export function CharactersSection() {
   const [characters, setCharacters] = useState<Character[]>([]);
