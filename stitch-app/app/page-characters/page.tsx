@@ -1,4 +1,4 @@
-import { CharactersSection } from "@/app/componens/characters/character-section";
+import { CharactersSection } from "@/app/components/characters/character-section";
 
 export default function Home() {
   return (

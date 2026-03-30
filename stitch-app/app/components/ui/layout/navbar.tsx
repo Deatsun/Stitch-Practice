@@ -9,22 +9,22 @@ export function Navbar() {
         </span>
 
         <div className="hidden items-center gap-6 md:flex">
-          <Link href="/page-characters" className="text-[var(--color-muted)] transition-colors duration-300 hover:text-[var(--color-primary)]">
+
+  <Link href="/page-characters" className="text-[var(--color-muted)] transition-colors duration-300 hover:text-[var(--color-primary)]">
   Characters
 </Link>
+
           
 <Link href="/page-location" className="text-[var(--color-muted)] transition-colors duration-300 hover:text-[var(--color-primary)]">
   Dimensions
 </Link>
 
 
+  <Link href="/page-episodes"className="text-[var(--color-muted)] transition-colors duration-300 hover:text-[var(--color-primary)]">
+  Episodes
+</Link>
 
-          <a
-            href="#"
-            className="text-[var(--color-muted)] transition-colors duration-300 hover:text-[var(--color-primary)]"
-          >
-            Episodes
-          </a>
+
         </div>
       </div>
 

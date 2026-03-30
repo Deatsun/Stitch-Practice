@@ -1,4 +1,4 @@
-import { LocationCard } from "@/app/componens/location/location-card"
+import { LocationCard } from "@/app/components/location/location-card"
 import type { LocationItem } from "@/app/lib/types/location/types";
 
 interface LocationGridProps {

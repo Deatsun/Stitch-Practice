@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { LocationGrid } from "@/app/componens/location/location-grid";
+import { LocationGrid } from "@/app/components/location/location-grid";
+import { SearchBar } from "@/app/components/ui/search-bar";
 import type { LocationItem } from "@/app/lib/types/location/types";
 
 const filterOptions = [
@@ -43,7 +44,7 @@ export function LocationSection() {
 
         const data = await response.json();
         setLocations(data.results ?? []);
-      } catch (err) {
+      } catch {
         setError("Failed to load dimensions.");
       } finally {
         setLoading(false);
@@ -81,19 +82,11 @@ export function LocationSection() {
       </header>
 
       <div className="mb-12 flex flex-col items-center justify-between gap-4 md:flex-row">
-        <div className="relative w-full md:max-w-md">
-          <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--color-muted)]">
-            ⌕
-          </span>
-
-          <input
-            type="text"
-            placeholder="Search coordinates..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="w-full rounded-lg border border-white/10 bg-black/20 py-4 pl-12 pr-4 text-white outline-none transition-all placeholder:text-[var(--color-muted)] focus:border-[var(--color-primary)]"
-          />
-        </div>
+        <SearchBar
+          value={search}
+          onChange={setSearch}
+          placeholder="Search coordinates..."
+        />
 
         <div className="flex w-full gap-3 overflow-x-auto pb-2 md:w-auto">
           {filterOptions.map((option) => {
