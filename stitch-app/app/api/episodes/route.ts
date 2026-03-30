@@ -1,15 +1,18 @@
+export async function GET(request: Request) {
+  try {
+    const { searchParams } = new URL(request.url);
+    const page = searchParams.get("page") ?? "1";
 
-export async function  GET(){
-    try{
-        const res = await fetch("https://rickandmortyapi.com/api/episode");
-            const data = await res.json();
+    const res = await fetch(
+      `https://rickandmortyapi.com/api/episode?page=${page}`
+    );
+    const data = await res.json();
 
-            return Response.json(data);
-    } catch(error)
-    {
-        return Response.json({error:"Failed to fetch chracters"},
-            {status: 500}
-        )
-    }
+    return Response.json(data);
+  } catch {
+    return Response.json(
+      { error: "Failed to fetch episodes" },
+      { status: 500 }
+    );
+  }
 }
-    

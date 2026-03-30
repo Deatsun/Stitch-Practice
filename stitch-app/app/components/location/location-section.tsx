@@ -1,9 +1,20 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { LocationGrid } from "@/app/components/location/location-grid";
+import { Pagination } from "@/app/components/ui/pagination";
 import { SearchBar } from "@/app/components/ui/search-bar";
 import type { LocationItem } from "@/app/lib/types/location/types";
+
+interface LocationResponse {
+  info: {
+    count: number;
+    pages: number;
+    next: string | null;
+    prev: string | null;
+  };
+  results: LocationItem[];
+}
 
 const filterOptions = [
   "All Realms",
@@ -24,11 +35,16 @@ function matchesCategory(location: LocationItem, activeFilter: string) {
 }
 
 export function LocationSection() {
+  const sectionRef = useRef<HTMLElement | null>(null);
+
   const [locations, setLocations] = useState<LocationItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [search, setSearch] = useState("");
   const [activeFilter, setActiveFilter] = useState("All Realms");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalCount, setTotalCount] = useState(0);
 
   useEffect(() => {
     const fetchLocations = async () => {
@@ -36,14 +52,16 @@ export function LocationSection() {
         setLoading(true);
         setError("");
 
-        const response = await fetch("/api/location");
+        const response = await fetch(`/api/location?page=${currentPage}`);
 
         if (!response.ok) {
           throw new Error("Failed to fetch locations");
         }
 
-        const data = await response.json();
+        const data: LocationResponse = await response.json();
         setLocations(data.results ?? []);
+        setTotalPages(data.info?.pages ?? 1);
+        setTotalCount(data.info?.count ?? 0);
       } catch {
         setError("Failed to load dimensions.");
       } finally {
@@ -52,7 +70,13 @@ export function LocationSection() {
     };
 
     fetchLocations();
-  }, []);
+  }, [currentPage]);
+
+  useEffect(() => {
+    if (sectionRef.current) {
+      sectionRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [currentPage]);
 
   const filteredLocations = useMemo(() => {
     const normalizedSearch = search.trim().toLowerCase();
@@ -69,7 +93,10 @@ export function LocationSection() {
   }, [locations, search, activeFilter]);
 
   return (
-    <section className="mx-auto max-w-[1440px] px-6 pb-24 pt-16">
+    <section
+      ref={sectionRef}
+      className="mx-auto max-w-[1440px] px-6 pb-24 pt-16"
+    >
       <header className="mb-16 space-y-4">
         <h1 className="text-7xl font-bold uppercase leading-none tracking-tighter text-[var(--color-primary)] md:text-8xl">
           Dimensions
@@ -118,23 +145,29 @@ export function LocationSection() {
         <div className="rounded-xl border border-red-400/20 bg-red-400/10 px-6 py-10 text-center text-red-300">
           {error}
         </div>
+      ) : filteredLocations.length === 0 ? (
+        <div className="rounded-xl border border-white/10 bg-white/5 px-6 py-10 text-center text-[var(--color-muted)]">
+          No matching dimensions found.
+        </div>
       ) : (
-        <LocationGrid locations={filteredLocations} />
+        <>
+          <LocationGrid locations={filteredLocations} />
+
+          <div className="mt-10 flex items-center justify-between gap-4">
+            <p className="text-xs uppercase tracking-[0.25em] text-[var(--color-muted)]">
+              Showing {filteredLocations.length} of {totalCount} multiversal
+              coordinates
+            </p>
+          </div>
+
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+            className="mt-14"
+          />
+        </>
       )}
-
-      <div className="mt-20 flex flex-col items-center space-y-6">
-        <button
-          type="button"
-          className="rounded-full border border-[var(--color-primary)]/30 bg-transparent px-12 py-4 text-sm uppercase tracking-widest text-[var(--color-primary)] transition-all hover:bg-white/5 active:scale-95"
-        >
-          Access Next Sector
-        </button>
-
-        <p className="text-[10px] uppercase tracking-[0.4em] text-[var(--color-muted)]">
-          Showing {filteredLocations.length} of {locations.length} multiversal
-          coordinates
-        </p>
-      </div>
     </section>
   );
 }
